@@ -16,6 +16,7 @@ NeoBundle 'git://github.com/mattn/zencoding-vim.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
 NeoBundle 'git://github.com/tpope/vim-surround'
+NeoBundle 'git://github.com/Townk/vim-autoclose'
 NeoBundle 'git://github.com/skammer/vim-css-color'
 NeoBundle 'git://github.com/scrooloose/nerdtree'
 NeoBundle 'git://github.com/altercation/vim-colors-solarized'
@@ -23,45 +24,68 @@ NeoBundle 'git://github.com/cschlueter/vim-wombat.git'
 NeoBundle 'git://github.com/mrtazz/molokai.vim'
 
 filetype plugin on
-filetype indent on
+filetype plugin indent on
+syntax enable
 
-"""""""""""""""""""""""""""""""""""""""
-" vim general settings
-"""""""""""""""""""""""""""""""""""""""
-set backupdir=~/.vimbackup
-set directory=~/.vimbackup
-set autoindent
-set browsedir=buffer 
-set clipboard=unnamed
+" Vi互換をオフにする
 set nocompatible
-set expandtab
-set hidden
-set incsearch
-set list
-set listchars=eol:$,tab:>\ ,extends:<
-set number
-set shiftwidth=4
-set showmatch
-set smartcase
-set smartindent
-set smarttab
+" バックアップファイルを作るディレクトリを設定する
+set backupdir=~/.vimbackup
+" スワップファイル用のディレクトリ名をコンマで区切って指定する
+set directory=~/.vimbackup
+" 新しい行を開始したときに新しい行のインデントを現在の行と同じ量にする
+set autoindent
+" ファイルブラウザにどのディレクトリを使うか
+set browsedir=buffer
+" クリップボードの動作設定
+set clipboard=unnamed
+" ファイルないのTabが対応するスペースの数
 set tabstop=4
+" 行番号を表示する
+set number
+" 自動インデントの各段階に使われるスペースの数
+set shiftwidth=4
+" インサートモードでTabを入力するとTab文字の代わりにshiftwidthの数のスペースを挿入する
+set expandtab
+" 保存しないで他のファイルを表示することが出来るようにする
+set hidden
+"タブ文字、行末など不可視文字を表示する
+set list
+" listで表示される文字のフォーマットを指定する
+set listchars=eol:$,tab:>\ ,extends:<
+" 閉じ括弧が入力されたとき、対応する括弧を表示する
+set showmatch
+" 検索で小文字なら大文字を無視、大文字なら無視しない
+set smartcase
+" 新しい行を作ったときに高度な自動インデントを行う
+set smartindent
+" 行頭の余白内でTabを打つとshiftwidthの数だけインデントする
+set smarttab
+" カーソルを行頭、行末でとまらないようにする
 set whichwrap=b,s,h,l,<,>,[,]
+" インクリメンタルサーチを行う
+set incsearch
+" 検索時にファイルの最後まで行ったら最初に戻らない
 set nowrapscan
+" ステータスラインを2行にする
+set laststatus=2
+" ステータスラインのフォーマット
+set statusline=%<%f\ #%n%m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%y%=%l,%c%V%8P
+
+" 端末の出力に用いられるエンコーディングを指定
+set termencoding=utf-8
+" Vimが内部で用いるエンコーディングを指定
+set encoding=utf-8
+" Vimが既存のファイルを開く際、適切なエンコーディングを自動的に判定するために用いられる
+set fileencodings=utf-8,cp932,euc-jp,iso-2022-jp
+" Vimが認識できるファイルフォーマットのリスト
+set ffs=unix,dos,mac
+" UTF-8の□や○でカーソル位置がずれないようにする
+if exists('&ambiwidth')
+	set ambiwidth=double
+endif
 
 colorscheme wombat
-
-augroup InsertHook
-autocmd!
-autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
-autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
-augroup END
-
-au BufNewFile,BufRead * set iminsert=0
-au BufNewFile,BufRead * set tabstop=4 shiftwidth=4
-au BufNewFile,BufRead *.txt set iminsert=2
-highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=#666666
-au BufNewFile,BufRead * match ZenkakuSpace /�@/
 
 """""""""""""""""""""""""""""""""""""""
 " .vimrc quick edit settings
@@ -71,22 +95,29 @@ nnoremap <silent> <Space>eg  :<C-u>edit $MYGVIMRC<CR>
 " Set augroup.
 augroup MyAutoCmd
     autocmd!
+    if !has('gui_running') && !(has('win32') || has('win64'))
+        autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+    else
+        autocmd BufWritePost $MYVIMRC source $MYVIMRC | 
+                \ if has('gui_running') | source $MYGVIMRC
+        autocmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
+    endif
 augroup END
 
-if !has('gui_running') && !(has('win32') || has('win64'))
-    autocmd MyAutoCmd BufWritePost $MYVIMRC nested source $MYVIMRC
-else
-    autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC | 
-                \ if has('gui_running') | source $MYGVIMRC
-    autocmd MyAutoCmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
-endif
+augroup InsertStatusLineHilight
+    autocmd!
+    autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
+    autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
+augroup END
 
 """""""""""""""""""""""""""""""""""""""
 " syntax check settings
 """""""""""""""""""""""""""""""""""""""
-autocmd filetype php :set makeprg=php\ -l\ %
-autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
-
+augroup SyntaxCheck
+    autocmd!
+    autocmd filetype php :set makeprg=php\ -l\ %
+    autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
+augroup END
 """""""""""""""""""""""""""""""""""""""
 " Unite plugin settings
 """""""""""""""""""""""""""""""""""""""
@@ -165,11 +196,19 @@ endfunction"}}}
     "let g:neocomplcache_enable_auto_select = 1
 
 """""""""""""""""""""""""""""""""""""""
+" Surround plugin settings
+"""""""""""""""""""""""""""""""""""""""
+let b:surround_{char2nr('p')} = "<?php \r ?>"
+let b:surround_{char2nr('e')} = "<?php echo $\r; ?>"
+let b:surround_{char2nr('h')} = "<?php echo h( $\r ); ?>"
+let b:surround_{char2nr('f')} = "<?php foreach ($\r as $val): ?>\n<?php endforeach; ?>"
+
+"""""""""""""""""""""""""""""""""""""""
 " Ref plugin settings 
 """""""""""""""""""""""""""""""""""""""
 nmap ,ra :<C-u>Ref alc<Space>
 nmap ,rp :<C-u>Ref phpmanual<Space>
-let g:ref_phpmanual_path = '~/.vim/dict/phpmanual'
+let g:ref_phpmanual_path = $HOME . '/Dropbox/phpmanual'
 let g:ref_alc_start_linenumber = 39
 
 """""""""""""""""""""""""""""""""""
