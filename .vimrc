@@ -23,6 +23,9 @@ NeoBundle 'git://github.com/altercation/vim-colors-solarized'
 NeoBundle 'git://github.com/cschlueter/vim-wombat.git'
 NeoBundle 'git://github.com/mrtazz/molokai.vim'
 NeoBundle 'git://github.com/vim-scripts/Zenburn'
+NeoBundle 'git://github.com/therubymug/vim-pyte'
+NeoBundle 'newspaper.vim'
+NeoBundle 'Changed'
 filetype plugin on
 filetype plugin indent on
 syntax enable
@@ -72,6 +75,9 @@ set laststatus=2
 " ステータスラインのフォーマット
 set statusline=%<%f\ #%n%m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%y%=%l,%c%V%8P
 
+set t_Co=256
+colorscheme molokai
+
 " 端末の出力に用いられるエンコーディングを指定
 set termencoding=utf-8
 " Vimが内部で用いるエンコーディングを指定
@@ -117,6 +123,31 @@ augroup SyntaxCheck
     autocmd filetype php :set makeprg=php\ -l\ %
     autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
 augroup END
+
+"""""""""""""""""""""""""""""""""""""""
+" Comment out key-mapping
+" lhs comments
+"""""""""""""""""""""""""""""""""""""""
+vmap ,# :s/^/#/<CR>:nohlsearch<CR>
+vmap ,/ :s/^/\/\//<CR>:nohlsearch<CR>
+vmap ,> :s/^/> /<CR>:nohlsearch<CR>
+vmap ," :s/^/\"/<CR>:nohlsearch<CR>
+vmap ,% :s/^/%/<CR>:nohlsearch<CR>
+vmap ,! :s/^/!/<CR>:nohlsearch<CR>
+vmap ,; :s/^/;/<CR>:nohlsearch<CR>
+vmap ,- :s/^/--/<CR>:nohlsearch<CR>
+vmap ,c :s/^\/\/\\|^--\\|^> \\|^[#"%!;]//<CR>:nohlsearch<CR>
+
+" wrapping comments
+vmap ,* :s/^\(.*\)$/\/\* \1 \*\//<CR>:nohlsearch<CR>
+vmap ,( :s/^\(.*\)$/\(\* \1 \*\)/<CR>:nohlsearch<CR>
+vmap ,< :s/^\(.*\)$/<!-- \1 -->/<CR>:nohlsearch<CR>
+vmap ,d :s/^\([/(]\*\\|<!--\) \(.*\) \(\*[/)]\\|-->\)$/\2/<CR>:nohlsearch<CR> 
+
+" block comments
+vmap ,b v`<I<CR><esc>k0i/*<ESC>`>j0i*/<CR><esc><ESC>
+vmap ,h v`<I<CR><esc>k0i<!--<ESC>`>j0i--><CR><esc><ESC>
+
 """""""""""""""""""""""""""""""""""""""
 " Unite plugin settings
 """""""""""""""""""""""""""""""""""""""
