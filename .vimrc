@@ -22,7 +22,7 @@ NeoBundle 'git://github.com/scrooloose/nerdtree'
 NeoBundle 'git://github.com/altercation/vim-colors-solarized'
 NeoBundle 'git://github.com/cschlueter/vim-wombat.git'
 NeoBundle 'git://github.com/mrtazz/molokai.vim'
-
+NeoBundle 'git://github.com/vim-scripts/Zenburn'
 filetype plugin on
 filetype plugin indent on
 syntax enable
@@ -85,7 +85,7 @@ if exists('&ambiwidth')
 	set ambiwidth=double
 endif
 
-colorscheme wombat
+com! C let kwbd_bn= bufnr("%")|enew|exe "bdel ".kwbd_bn|unlet kwbd_bn
 
 """""""""""""""""""""""""""""""""""""""
 " .vimrc quick edit settings
@@ -98,8 +98,7 @@ augroup MyAutoCmd
     if !has('gui_running') && !(has('win32') || has('win64'))
         autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
     else
-        autocmd BufWritePost $MYVIMRC source $MYVIMRC | 
-                \ if has('gui_running') | source $MYGVIMRC
+        autocmd BufWritePost $MYVIMRC source $MYVIMRC | if has('gui_running') | source $MYGVIMRC
         autocmd BufWritePost $MYGVIMRC if has('gui_running') | source $MYGVIMRC
     endif
 augroup END
@@ -175,11 +174,15 @@ endfunction"}}}
     endif
     let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
+    " Define snippets directory"
+    let g:neocomplcache_snippets_dir = $HOME . '/Dropbox/vim/snippets'
+
     " Plugin key-mappings.
     imap <C-k>     <Plug>(neocomplcache_snippets_expand)
     smap <C-k>     <Plug>(neocomplcache_snippets_expand)
     inoremap <expr><C-g>     neocomplcache#undo_completion()
     inoremap <expr><C-l>     neocomplcache#complete_common_string()
+    nnoremap <silent> <Space>es  :<C-u>NeoComplCacheEditSnippets<CR>
 
     " Recommended key-mappings.
     " <CR>: close popup and save indent.
