@@ -12,6 +12,7 @@ NeoBundle 'git://github.com/Shougo/neocomplcache.git'
 NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
 NeoBundle 'git://github.com/Shougo/vimproc.git'
 NeoBundle 'git://github.com/Shougo/unite.vim.git'
+NeoBundle 'git://github.com/kana/vim-arpeggio'
 NeoBundle 'git://github.com/mattn/zencoding-vim.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
@@ -19,6 +20,7 @@ NeoBundle 'git://github.com/tpope/vim-surround'
 NeoBundle 'git://github.com/Townk/vim-autoclose'
 NeoBundle 'git://github.com/skammer/vim-css-color'
 NeoBundle 'git://github.com/scrooloose/nerdtree'
+NeoBundle 'git://github.com/kien/ctrlp.vim'
 NeoBundle 'git://github.com/altercation/vim-colors-solarized'
 NeoBundle 'git://github.com/cschlueter/vim-wombat.git'
 NeoBundle 'git://github.com/mrtazz/molokai.vim'
@@ -26,9 +28,12 @@ NeoBundle 'git://github.com/vim-scripts/Zenburn'
 NeoBundle 'git://github.com/therubymug/vim-pyte'
 NeoBundle 'newspaper.vim'
 NeoBundle 'Changed'
+
+NeoBundle 'git://github.com/violetyk/cake.vim'
 filetype plugin on
 filetype plugin indent on
 syntax enable
+
 
 " Vi互換をオフにする
 set nocompatible
@@ -116,6 +121,14 @@ augroup InsertStatusLineHilight
 augroup END
 
 """""""""""""""""""""""""""""""""""""""
+" Filetype settings
+"""""""""""""""""""""""""""""""""""""""
+augroup FileTypeSetting
+    autocmd!
+    autocmd BufRead,BufNewFile *.ctp set filetype=php
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""
 " syntax check settings
 """""""""""""""""""""""""""""""""""""""
 augroup SyntaxCheck
@@ -147,6 +160,17 @@ vmap ,d :s/^\([/(]\*\\|<!--\) \(.*\) \(\*[/)]\\|-->\)$/\2/<CR>:nohlsearch<CR>
 " block comments
 vmap ,b v`<I<CR><esc>k0i/*<ESC>`>j0i*/<CR><esc><ESC>
 vmap ,h v`<I<CR><esc>k0i<!--<ESC>`>j0i--><CR><esc><ESC>
+
+"jk同時押しでEsc
+call arpeggio#load()
+Arpeggionmap jk <Esc>
+Arpeggioimap jk <Esc>
+Arpeggiocmap jk <Esc>
+Arpeggiovmap jk <Esc>
+Arpeggionmap fj <Esc>
+Arpeggioimap fj <Esc>
+Arpeggiocmap fj <Esc>
+Arpeggiovmap fj <Esc>
 
 """""""""""""""""""""""""""""""""""""""
 " Unite plugin settings
@@ -250,3 +274,19 @@ let g:ref_alc_start_linenumber = 39
 """""""""""""""""""""""""""""""""""
 nmap <F2> :<C-u>NERDTree<Space>
 nmap <F3> :<C-u>NERDTreeToggle<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""
+" Cake.vim plugin key mappings and settings
+""""""""""""""""""""""""""""""""""""""""""""""""
+let g:cakephp_auto_set_project = 1
+let g:cakephp_app = $HOME . "/develop/dwh/app/"
+
+nnoremap <Space>cm :<C-u>Cmodel<Space>
+nnoremap <Space>ccv :<C-u>Ccontrollerview<Space>
+nnoremap <Space>ccm :<C-u>Ccomponent<Space>
+nnoremap <Space>ccf :<C-u>Cconfig<Space>
+nnoremap <Space>cb :<C-u>Cbehavior<Space>
+nnoremap <Space>ch :<C-u>Chelper<Space>
+nnoremap <Space>ct :<C-u>Ctest<Space>
+nnoremap <Space>cf :<C-u>Cfixture<Space>
+nnoremap <Space>cs :<C-u>Cshell<Space>
