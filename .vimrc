@@ -278,9 +278,10 @@ nmap <F3> :<C-u>NERDTreeToggle<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Cake.vim plugin key mappings and settings
 """"""""""""""""""""""""""""""""""""""""""""""""
-let g:cakephp_auto_set_project = 1
-let g:cakephp_app = $HOME . "/develop/dwh/app/"
-
+if !(has('win32') || has('win64'))
+    let g:cakephp_auto_set_project = 1
+    let g:cakephp_app = $HOME . "/develop/dwh/app/"
+endif
 nnoremap <Space>cm :<C-u>Cmodel<Space>
 nnoremap <Space>ccv :<C-u>Ccontrollerview<Space>
 nnoremap <Space>ccm :<C-u>Ccomponent<Space>
