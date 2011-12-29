@@ -21,6 +21,7 @@ NeoBundle 'git://github.com/Townk/vim-autoclose'
 NeoBundle 'git://github.com/skammer/vim-css-color'
 NeoBundle 'git://github.com/scrooloose/nerdtree'
 NeoBundle 'git://github.com/kien/ctrlp.vim'
+NeoBundle 'git://github.com/vim-scripts/dbext.vim'
 NeoBundle 'git://github.com/altercation/vim-colors-solarized'
 NeoBundle 'git://github.com/cschlueter/vim-wombat.git'
 NeoBundle 'git://github.com/mrtazz/molokai.vim'
@@ -280,9 +281,11 @@ nmap <F3> :<C-u>NERDTreeToggle<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""
 if !(has('win32') || has('win64'))
     let g:cakephp_auto_set_project = 1
-    let g:cakephp_app = $HOME . "/develop/dwh/app/"
+    let g:cakephp_app = $HOME . "/path/to/app/"
 endif
 nnoremap <Space>cm :<C-u>Cmodel<Space>
+nnoremap <Space>cco :<C-u>Ccontroller<Space>
+nnoremap <Space>cv :<C-u>Cview<Space>
 nnoremap <Space>ccv :<C-u>Ccontrollerview<Space>
 nnoremap <Space>ccm :<C-u>Ccomponent<Space>
 nnoremap <Space>ccf :<C-u>Cconfig<Space>
@@ -291,3 +294,18 @@ nnoremap <Space>ch :<C-u>Chelper<Space>
 nnoremap <Space>ct :<C-u>Ctest<Space>
 nnoremap <Space>cf :<C-u>Cfixture<Space>
 nnoremap <Space>cs :<C-u>Cshell<Space>
+
+
+"""""""""""""""""""""""""""""""""""""""
+" Dbext settings
+"""""""""""""""""""""""""""""""""""""""
+let g:dbext_default_type = 'MySQL'
+let g:dbext_default_host = 'localhost'
+let g:dbext_default_dbname = 'mydb'
+let g:dbext_default_user = 'user'
+let g:dbext_default_passwd = 'password'
+
+let g:dbext_default_buffer_lines = 25
+
+nnoremap <Space>se :<C-u>Select * from 
+nnoremap <Space>de :<C-u>DBExecSQL DESCRIBE 
