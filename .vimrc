@@ -11,6 +11,7 @@ endif
 NeoBundle 'git://github.com/Shougo/neocomplcache.git'
 NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
 NeoBundle 'git://github.com/Shougo/vimproc.git'
+NeoBundle 'git://github.com/Shougo/vimshell'
 NeoBundle 'git://github.com/Shougo/unite.vim.git'
 NeoBundle 'git://github.com/kana/vim-arpeggio'
 NeoBundle 'git://github.com/mattn/zencoding-vim.git'
@@ -21,6 +22,7 @@ NeoBundle 'git://github.com/Townk/vim-autoclose'
 NeoBundle 'git://github.com/skammer/vim-css-color'
 NeoBundle 'git://github.com/scrooloose/nerdtree'
 NeoBundle 'git://github.com/kien/ctrlp.vim'
+NeoBundle 'git://github.com/godlygeek/tabular'
 NeoBundle 'git://github.com/altercation/vim-colors-solarized'
 NeoBundle 'git://github.com/cschlueter/vim-wombat.git'
 NeoBundle 'git://github.com/mrtazz/molokai.vim'
@@ -161,7 +163,9 @@ vmap ,d :s/^\([/(]\*\\|<!--\) \(.*\) \(\*[/)]\\|-->\)$/\2/<CR>:nohlsearch<CR>
 vmap ,b v`<I<CR><esc>k0i/*<ESC>`>j0i*/<CR><esc><ESC>
 vmap ,h v`<I<CR><esc>k0i<!--<ESC>`>j0i--><CR><esc><ESC>
 
-"jk同時押しでEsc
+""""""""""""""""""""""""""""""""""""""""
+" Arpeggio plugin settings
+""""""""""""""""""""""""""""""""""""""""
 call arpeggio#load()
 Arpeggionmap jk <Esc>
 Arpeggioimap jk <Esc>
@@ -172,9 +176,14 @@ Arpeggioimap fj <Esc>
 Arpeggiocmap fj <Esc>
 Arpeggiovmap fj <Esc>
 
-"""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""
+" VimShell plugin settings
+""""""""""""""""""""""""""""""""""""""""
+nnoremap <silent> <Space>sh :VimShell<CR>
+
+""""""""""""""""""""""""""""""""""""""""
 " Unite plugin settings
-"""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""
 "unite prefix key.
 nnoremap [unite] <Nop>
 nmap <Space>f [unite]
@@ -256,10 +265,13 @@ endfunction"}}}
 """""""""""""""""""""""""""""""""""""""
 " Surround plugin settings
 """""""""""""""""""""""""""""""""""""""
-let b:surround_{char2nr('p')} = "<?php \r ?>"
-let b:surround_{char2nr('e')} = "<?php echo $\r; ?>"
-let b:surround_{char2nr('h')} = "<?php echo h( $\r ); ?>"
-let b:surround_{char2nr('f')} = "<?php foreach ($\r as $val): ?>\n<?php endforeach; ?>"
+augroup Surround
+    autocmd!
+    autocmd Filetype php let b:surround_{char2nr('p')} = "<?php \r ?>"
+    autocmd Filetype php let b:surround_{char2nr('e')} = "<?php echo $\r; ?>"
+    autocmd Filetype php let b:surround_{char2nr('h')} = "<?php echo h( $\r ); ?>"
+    autocmd Filetype php let b:surround_{char2nr('f')} = "<?php foreach ($\r as $val): ?>\n<?php endforeach; ?>"
+augroup END
 
 """""""""""""""""""""""""""""""""""""""
 " Ref plugin settings 
@@ -280,9 +292,11 @@ nmap <F3> :<C-u>NERDTreeToggle<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""
 if !(has('win32') || has('win64'))
     let g:cakephp_auto_set_project = 1
-    let g:cakephp_app = $HOME . "/develop/dwh/app/"
+    let g:cakephp_app = $HOME . "/Dropbox/tcaplogo/app/"
 endif
 nnoremap <Space>cm :<C-u>Cmodel<Space>
+nnoremap <Space>cc :<C-u>Ccontroller<Space>
+nnoremap <Space>cv :<C-u>Cview<Space>
 nnoremap <Space>ccv :<C-u>Ccontrollerview<Space>
 nnoremap <Space>ccm :<C-u>Ccomponent<Space>
 nnoremap <Space>ccf :<C-u>Cconfig<Space>
