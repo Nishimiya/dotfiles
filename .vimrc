@@ -18,14 +18,14 @@ NeoBundle 'git://github.com/mattn/zencoding-vim.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
 NeoBundle 'git://github.com/tpope/vim-surround'
-NeoBundle 'git://github.com/Townk/vim-autoclose'
 NeoBundle 'git://github.com/skammer/vim-css-color'
 NeoBundle 'git://github.com/scrooloose/nerdtree'
 NeoBundle 'git://github.com/kien/ctrlp.vim'
 NeoBundle 'git://github.com/godlygeek/tabular'
+NeoBundle 'git://github.com/vim-scripts/dbext.vim'
 NeoBundle 'git://github.com/altercation/vim-colors-solarized'
-NeoBundle 'git://github.com/cschlueter/vim-wombat.git'
 NeoBundle 'git://github.com/mrtazz/molokai.vim'
+NeoBundle 'git://github.com/vim-scripts/wombat256.vim'
 NeoBundle 'git://github.com/vim-scripts/Zenburn'
 NeoBundle 'git://github.com/therubymug/vim-pyte'
 NeoBundle 'newspaper.vim'
@@ -290,10 +290,6 @@ nmap <F3> :<C-u>NERDTreeToggle<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Cake.vim plugin key mappings and settings
 """"""""""""""""""""""""""""""""""""""""""""""""
-if !(has('win32') || has('win64'))
-    let g:cakephp_auto_set_project = 1
-    let g:cakephp_app = $HOME . "/Dropbox/tcaplogo/app/"
-endif
 nnoremap <Space>cm :<C-u>Cmodel<Space>
 nnoremap <Space>cc :<C-u>Ccontroller<Space>
 nnoremap <Space>cv :<C-u>Cview<Space>
@@ -305,3 +301,12 @@ nnoremap <Space>ch :<C-u>Chelper<Space>
 nnoremap <Space>ct :<C-u>Ctest<Space>
 nnoremap <Space>cf :<C-u>Cfixture<Space>
 nnoremap <Space>cs :<C-u>Cshell<Space>
+
+
+"""""""""""""""""""""""""""""""""""""""
+" machine local settings
+"""""""""""""""""""""""""""""""""""""""
+if filereadable(expand('~/.vimrc.local'))
+  source ~/.vimrc.local
+endif
+
