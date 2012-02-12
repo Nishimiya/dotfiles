@@ -11,24 +11,24 @@ endif
 NeoBundle 'git://github.com/Shougo/neocomplcache.git'
 NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
 NeoBundle 'git://github.com/Shougo/vimproc.git'
+NeoBundle 'git://github.com/Shougo/vimshell'
 NeoBundle 'git://github.com/Shougo/unite.vim.git'
 NeoBundle 'git://github.com/kana/vim-arpeggio'
 NeoBundle 'git://github.com/mattn/zencoding-vim.git'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 NeoBundle 'git://github.com/thinca/vim-ref.git'
 NeoBundle 'git://github.com/tpope/vim-surround'
-NeoBundle 'git://github.com/Townk/vim-autoclose'
 NeoBundle 'git://github.com/skammer/vim-css-color'
 NeoBundle 'git://github.com/scrooloose/nerdtree'
 NeoBundle 'git://github.com/kien/ctrlp.vim'
+NeoBundle 'git://github.com/godlygeek/tabular'
 NeoBundle 'git://github.com/vim-scripts/dbext.vim'
 NeoBundle 'git://github.com/altercation/vim-colors-solarized'
-NeoBundle 'git://github.com/cschlueter/vim-wombat.git'
 NeoBundle 'git://github.com/mrtazz/molokai.vim'
+NeoBundle 'git://github.com/vim-scripts/wombat256.vim'
 NeoBundle 'git://github.com/vim-scripts/Zenburn'
 NeoBundle 'git://github.com/therubymug/vim-pyte'
-NeoBundle 'newspaper.vim'
-NeoBundle 'Changed'
+"NeoBundle 'Changed'
 
 NeoBundle 'git://github.com/violetyk/cake.vim'
 filetype plugin on
@@ -162,7 +162,9 @@ vmap ,d :s/^\([/(]\*\\|<!--\) \(.*\) \(\*[/)]\\|-->\)$/\2/<CR>:nohlsearch<CR>
 vmap ,b v`<I<CR><esc>k0i/*<ESC>`>j0i*/<CR><esc><ESC>
 vmap ,h v`<I<CR><esc>k0i<!--<ESC>`>j0i--><CR><esc><ESC>
 
-"jk同時押しでEsc
+""""""""""""""""""""""""""""""""""""""""
+" Arpeggio plugin settings
+""""""""""""""""""""""""""""""""""""""""
 call arpeggio#load()
 Arpeggionmap jk <Esc>
 Arpeggioimap jk <Esc>
@@ -173,9 +175,14 @@ Arpeggioimap fj <Esc>
 Arpeggiocmap fj <Esc>
 Arpeggiovmap fj <Esc>
 
-"""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""
+" VimShell plugin settings
+""""""""""""""""""""""""""""""""""""""""
+nnoremap <silent> <Space>sh :VimShell<CR>
+
+""""""""""""""""""""""""""""""""""""""""
 " Unite plugin settings
-"""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""
 "unite prefix key.
 nnoremap [unite] <Nop>
 nmap <Space>f [unite]
@@ -257,10 +264,13 @@ endfunction"}}}
 """""""""""""""""""""""""""""""""""""""
 " Surround plugin settings
 """""""""""""""""""""""""""""""""""""""
-let b:surround_{char2nr('p')} = "<?php \r ?>"
-let b:surround_{char2nr('e')} = "<?php echo $\r; ?>"
-let b:surround_{char2nr('h')} = "<?php echo h( $\r ); ?>"
-let b:surround_{char2nr('f')} = "<?php foreach ($\r as $val): ?>\n<?php endforeach; ?>"
+augroup Surround
+    autocmd!
+    autocmd Filetype php let b:surround_{char2nr('p')} = "<?php \r ?>"
+    autocmd Filetype php let b:surround_{char2nr('e')} = "<?php echo $\r; ?>"
+    autocmd Filetype php let b:surround_{char2nr('h')} = "<?php echo h( $\r ); ?>"
+    autocmd Filetype php let b:surround_{char2nr('f')} = "<?php foreach ($\r as $val): ?>\n<?php endforeach; ?>"
+augroup END
 
 """""""""""""""""""""""""""""""""""""""
 " Ref plugin settings 
@@ -279,10 +289,6 @@ nmap <F3> :<C-u>NERDTreeToggle<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Cake.vim plugin key mappings and settings
 """"""""""""""""""""""""""""""""""""""""""""""""
-if !(has('win32') || has('win64'))
-    let g:cakephp_auto_set_project = 1
-    let g:cakephp_app = $HOME . "/path/to/app/"
-endif
 nnoremap <Space>cm :<C-u>Cmodel<Space>
 nnoremap <Space>cco :<C-u>Ccontroller<Space>
 nnoremap <Space>cv :<C-u>Cview<Space>
@@ -299,13 +305,14 @@ nnoremap <Space>cs :<C-u>Cshell<Space>
 """""""""""""""""""""""""""""""""""""""
 " Dbext settings
 """""""""""""""""""""""""""""""""""""""
-let g:dbext_default_type = 'MySQL'
-let g:dbext_default_host = 'localhost'
-let g:dbext_default_dbname = 'mydb'
-let g:dbext_default_user = 'user'
-let g:dbext_default_passwd = 'password'
-
 let g:dbext_default_buffer_lines = 25
 
 nnoremap <Space>se :<C-u>Select * from 
 nnoremap <Space>de :<C-u>DBExecSQL DESCRIBE 
+
+"""""""""""""""""""""""""""""""""""""""
+" machine local settings
+"""""""""""""""""""""""""""""""""""""""
+if filereadable(expand('~/.vimrc.local'))
+  source ~/.vimrc.local
+endif
